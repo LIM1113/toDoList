@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Farro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    <script src="clock.js" charset="utf-8" defer></script>
+    <script src="list.js" charset="utf-8" defer></script>
+    <script src="greeting.js" charset="utf-8" defer></script>
+    <script src="weather.js" charset="utf-8" defer></script>
+    <script src="background.js" charset="utf-8" defer></script>
+  </head>
+  <body>
+    <div class="form">
+      <div class="screenTop">
+        <div class="Like">
+          Today's Emotion
+        </div>
+        <div class="weatherAPI">
+          <div class="place">
+            place
+          </div>
+          <div class="weather">
+            weather
+          </div>
+          <div class="temp">
+            temp
+          </div>
+        </div>
+      </div>
+      <div class="mainScreen">
+        <div class="leftForm">
+          <div class="dateShow">
+          </div>
+          <div class="clock">
+            00:00:00
+          </div>
+          <form class="name forms" action="index.html" method="post">
+            <input placeholder="Write your name">
+          </form>
+          <div class="nameForm">
+            <h4 class = "greeting"></h4>
+            <button class = "reset resetNon" type="button" name="button">reset</button>
+          </div>
+          <div class="toDo">
+            <form class="toDoList" action="index.html" method="post">
+              <input type="text" placeholder= "Today's schedule">
+            </form>
+          </div>
+        </div>
+        <div class="rightForm">
+          <div class="toDoBox">
+          </div>
+          <div class="peddingBox">
+          </div>
+        </div>
+    </div>
+    <div class="line">
+      Learn from yesterday,<br /> live for today,<br /> hope for tomorrow.
+    </div>
+  </div>
+  </body>
+</html>
