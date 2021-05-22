@@ -13,11 +13,13 @@ function dateStart(){
 
 function timeStart(){
   let date = new Date();
-  let hours = date.getHours();
+  let ampm = date.getHours() >= 12 ? "pm" : "am";
+  let hours = date.getHours() >= 12 ? date.getHours() - 12 : date.getHours();
   let minutes = date.getMinutes();
   let seconds = date.getSeconds();
+    
 
-  clock.innerText = `${hours >= 10 ? `${hours}` : `0${hours}`}:${minutes >= 10 ? `${minutes}` : `0${minutes}`}:${seconds >= 10 ? `${seconds}` : `0${seconds}`}`
+  clock.innerText = `${hours >= 10 ? `${hours}` : `0${hours}`}:${minutes >= 10 ? `${minutes}` : `0${minutes}`}:${seconds >= 10 ? `${seconds}` : `0${seconds}`} ${ampm}`
 }
 
 
