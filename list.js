@@ -5,39 +5,13 @@ let peddingBox = document.querySelector('.peddingBox')
 
 const BtnShow = 'btnshow'
 const LIST = 'list'
+const RED = 'red'
 let arrList = []
 let newId = 0;
 
 /*save in localStorage*/
 function savetoDoList(value){
   localStorage.setItem(LIST, JSON.stringify(arrList))
-}
-
-/*delete the list in localStorage*/
-
-function deleteToDo(event){
-  let delvalue =  event.target;
-  let delparent = delvalue.parentNode;
-  let lastparent = delparent.parentNode;
-
-  toDoBox.removeChild(lastparent);
-
-  const cleanToDos = arrList.filter(function(toDo){
-    return toDo.id !== parseInt(lastparent.id);
-  })
-
-  arrList = cleanToDos;
-  savetoDoList();
-}
-
-function redColor(){
-  event.target.classList.toggle('redColor');
-}
-
-function textThrough(event){
-  const checkValue = event.target;
-  const checkSibling = checkValue.nextSibling;
-  checkSibling.classList.toggle('textLine');
 }
 
 function addToPendding(value){
@@ -73,86 +47,161 @@ function penddingToDo(){
   penddingBoxBtn(value);
 }
 
+/*로컬스토리지 삭제*/
+function deleteToDo(event){
+  let delvalue =  event.target;
+  let delparent = delvalue.parentNode;
+  let lastparent = delparent.parentNode;
+
+  toDoBox.removeChild(lastparent);
+
+  const cleanToDos = arrList.filter(function(toDo){
+    return toDo.id !== parseInt(lastparent.id);
+  })
+
+  arrList = cleanToDos;
+  savetoDoList();
+}
+
+/*체크박스 status 변경*/
+function checkBoxEvent(event){
+  const checkValue = event.target;
+  const checkId = checkValue.id
+  const checkSibling = checkValue.nextSibling;
+  const parsedCheckId = parseInt(checkId)
+  //checkSibling.classList.toggle('textLine');
+
+  arrList.forEach(todo => {
+    if(todo.id === parsedCheckId && todo.status === "on"){
+      todo.status = "off";
+      checkSibling.classList.add('textLine')
+  } else if(todo.id === parsedCheckId && todo.status === "off"){
+    todo.status = "on";
+    checkSibling.classList.remove('textLine')
+  }})
+  savetoDoList();
+}
+
+/*todo 리스트 색 추가*/
+function redColor(){
+  const colorValue = event.target;
+  console.log(colorValue);
+  const colorId = colorValue.id;
+  const parsedcolorId = parseInt(colorId);
+
+  arrList.forEach(todo => {
+    if(todo.id === parsedcolorId && todo.color === "black"){
+      todo.color = "red";
+      colorValue.classList.add('redColor')
+    } else if(todo.id === parsedcolorId && todo.color === "red"){
+      todo.color = "black";
+      colorValue.classList.remove('redColor')
+  }})
+
+  savetoDoList();
+}
+
+/*todo리스트 앞으로 추가*/
 function insertBox(text){
   toDoBox.insertBefore(text,toDoBox.childNodes[0]);
 }
 
 /*show the list in the listBox*/
-function paintList(text){
+function paintList(text,status,color){
   const ul = document.createElement('ul');
-  const delBtn = document.createElement('button');
-  const check = document.createElement('input');
   const li = document.createElement('li');
-  const pendBtn = document.createElement('button');
   const div1 = document.createElement('div');
   const div2 = document.createElement('div');
-
+  const check = document.createElement('input');
   const upBtn = document.createElement('button');
-  upBtn.innerText = '⬆'
-  upBtn.className = 'Nonpend'
+  const pendBtn = document.createElement('button');
+  const delBtn = document.createElement('button');
 
   newId += 1;
-  pendBtn.className = "pend"
   div1.className = 'div1'
   div2.className = 'div2'
-  pendBtn.innerText = '⬇'
-  check.type = 'checkbox';
+
   ul.className = "todoSave";
-  delBtn.className = "del";
   li.className = "something";
-  delBtn.innerText = '✖';
   li.innerText = text;
+  li.setAttribute('id',newId);
+
+  check.type = 'checkbox';
   check.className = "checkBox";
+  check.setAttribute('id',newId);
+
+  pendBtn.className = "pend"
+  pendBtn.innerText = '⬇'
+  delBtn.className = "del";
+  delBtn.innerText = '✖';
+  upBtn.innerText = '⬆'
+  upBtn.className = 'Nonpend'
 
   div1.appendChild(check);
   div1.appendChild(li);
   div2.appendChild(delBtn);
   div2.appendChild(pendBtn);
-  div2.appendChild(upBtn);
+//  div2.appendChild(upBtn);
 
   pendBtn.classList.add(BtnShow);
-  upBtn.classList.remove(BtnShow);
+//  upBtn.classList.remove(BtnShow);
 
   insertBox(ul);
   ul.appendChild(div1);
   ul.appendChild(div2);
-
-  check.addEventListener('click',(e) => textThrough(e))
-  li.addEventListener('click',redColor);
-  delBtn.addEventListener('click', deleteToDo);
-  pendBtn.addEventListener('click',penddingToDo);
-
-  upBtn.addEventListener('click',() => console.log());
   ul.id = newId;
+
+
+/*버튼 클릭 이벤트*/
+  delBtn.addEventListener('click', deleteToDo);
+  li.addEventListener('click',redColor);
+  check.addEventListener('click',checkBoxEvent)
 
   let arrObj = {
     text: text,
-    id: newId
+    id: newId,
+    status: status,
+    color: color
   }
+
+  if (arrObj.status === 'on'){
+    check.checked = false;
+    li.classList.remove('textLine')
+  } else if(arrObj.status ==='off'){
+    check.checked = true;
+    li.classList.add('textLine')
+  }
+
+  if (arrObj.color === 'black'){
+  //  check.checked = false;
+    li.classList.remove('redColor')
+  } else if(arrObj.color === "red"){
+  //  check.checked = true;
+    li.classList.add('redColor')
+  }
+
 
   arrList.push(arrObj);
   savetoDoList();
 }
 
-/*default the form & toss the input value*/
-
+/*새로운 todo 추가*/
 function toDoFormSubmit(event){
   let listText = toDoText.value;
   event.preventDefault();
   if(listText === ""){
     return;
   }
-  paintList(listText);
+  paintList(listText,'on','black');
   toDoText.value = ""
 }
 
-/*loadList -> localstorage load to screen*/
-
+/*화면 로드*/
 function loadList(){
   const listValue = localStorage.getItem(LIST);
   if(listValue !== null){
     const listLode = JSON.parse(listValue);
-    listLode.forEach(todo => paintList(todo.text));
+    listLode.forEach(todo => paintList(todo.text,todo.status,todo.color));
   }
 }
 

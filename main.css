@@ -193,16 +193,21 @@ display: none;
 
 .div1 .something{
   color: var(--black-transparent-color);
+  text-shadow: -0.5px -0.5px var(--black-transparent-color);
   font-weight: bold;
 }
 
 .div1 .redColor{
   color: #d63031;
+  text-shadow: -0.5px -0.5px #e84118;
+  font-size: 16px;;
+
 }
 
 .div1 .textLine{
   text-decoration: line-through;;
-  color: rgba(10, 10, 10, 0.2);
+  color: rgba(200, 200, 200, 0.5)
+
 }
 
 .div2 button{
